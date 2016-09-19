@@ -1,0 +1,33 @@
+package ssa;
+
+import java.util.List;
+
+public class Mainline {
+
+	public static void main(String[] args) {
+		try {
+			Students students = new Students();
+			Student student = students.getById(100);
+			System.out.println(student);
+			
+			student.firstName = "Eric";
+			students.update(student);
+			student = students.getById(100);
+			System.out.println(student);
+			
+			Student newStudent = students.createInstance();
+			newStudent.firstName = "Davey";
+			newStudent.lastName = "Jones";
+			newStudent.gpa = 3.5;
+			newStudent.sat = 1400;
+			students.insert(newStudent);
+			
+			List<Student> moreStudents = students.select("SELECT * from student");
+			for(Student aStudent : moreStudents) {
+				//System.out.println(aStudent);
+			}
+			
+		} catch (Exception ex) { ex.printStackTrace(); }
+	}
+
+}

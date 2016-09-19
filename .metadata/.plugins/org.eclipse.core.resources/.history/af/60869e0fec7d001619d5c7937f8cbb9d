@@ -1,0 +1,43 @@
+package ssa;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class Student {
+	static SqlDB db = null;
+	public int id;
+	public String firstName;
+	public String lastName;
+	public double gpa;
+	public int sat;
+	
+	public static Student dbGetById(int id) {
+		try {
+			
+			String sql = "SELECT * from student where id = " + id;
+			db.stmt = db.conn.createStatement();
+			db.rs = db.stmt.executeQuery(sql);
+			if(!db.rs.next())
+				throw new Exception("No student for id " + id);
+			Student student = new Student();
+			student.id = db.rs.getInt("id");
+			student.firstName = db.rs.getString("first_name");
+			student.lastName = db.rs.getString("last_name");
+			student.gpa = db.rs.getDouble("gpa");
+			student.sat = db.rs.getInt("sat");
+			return student;
+			
+		} catch (Exception ex) { ex.printStackTrace(); }
+		return null;
+	}
+	public static void coonnect() throws FileNotFoundException, IOException, SQLException {
+		Properties prop = new Properties();
+		prop.load(new java.io.FileInputStream("app.properties"));
+		String url = prop.getProperty("url");
+		String usr = prop.getProperty("usr");
+		String pwd = prop.getProperty("pwd");
+		db = new SqlDB(url, usr, pwd);
+	}
+}

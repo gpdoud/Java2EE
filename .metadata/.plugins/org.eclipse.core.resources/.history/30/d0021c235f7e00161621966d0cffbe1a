@@ -1,0 +1,13 @@
+package ssa;
+
+public class Mainline {
+
+	public static void main(String[] args) {
+		try {
+			Student.connect();
+			Student student = Student.dbGetById(100);
+			System.out.println(student);
+		} catch (Exception ex) { ex.printStackTrace(); }
+	}
+
+}

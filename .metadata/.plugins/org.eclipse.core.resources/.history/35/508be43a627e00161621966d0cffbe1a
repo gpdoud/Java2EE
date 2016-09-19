@@ -1,0 +1,55 @@
+package ssa;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Properties;
+
+public class Students extends HashMap<Integer, Student> {
+
+	private static final long serialVersionUID = 1L;
+	SqlDB db = null;
+
+	private Student loadStudent(ResultSet rs) {
+		Student student = new Student();
+		try {
+			student.id = rs.getInt("id");
+			student.firstName = rs.getString("first_name");
+			student.lastName = rs.getString("last_name");
+			student.gpa = rs.getDouble("gpa");
+			student.sat = rs.getInt("sat");
+			return student;
+		} catch (SQLException ex) { ex.printStackTrace(); }
+		return null;
+	}
+	public Student dbGetById(int id) {
+		try {
+			
+			String sql = "SELECT * from student where id = " + id;
+			ResultSet rs = db.executeSqlQuery(sql);
+			if(!rs.next())
+				throw new Exception("No student for id " + id);
+			Student student = loadStudent(rs);
+			return student;
+		} catch (Exception ex) { ex.printStackTrace(); }
+		return null;
+	}
+	public static Student createInstance() {
+		Student student = new Student();
+		return student;
+	}
+	public Students() {
+		super();
+		makeSqlConnection();
+	}
+	private void makeSqlConnection() {
+		try {
+			Properties prop = new Properties();
+			prop.load(new java.io.FileInputStream("app.properties"));
+			String url = prop.getProperty("url");
+			String usr = prop.getProperty("usr");
+			String pwd = prop.getProperty("pwd");
+			db = new SqlDB(url, usr, pwd);
+		} catch (Exception ex) { ex.printStackTrace(); }
+	}
+}
