@@ -3,7 +3,7 @@ package ssa;
 import java.sql.*;
 import java.util.*;
 
-public class Students extends HashMap<Integer, Student> {
+public class StudentFactory extends HashMap<Integer, Student> {
 
 	private static final long serialVersionUID = 1L;
 	SqlDB db = null;
@@ -53,7 +53,7 @@ public class Students extends HashMap<Integer, Student> {
 		Student student = new Student();
 		return student;
 	}
-	public Students() {
+	public StudentFactory() {
 		super();
 		makeSqlConnection();
 	}
